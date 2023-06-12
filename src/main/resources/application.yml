@@ -1,0 +1,11 @@
+# MySQL config
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employeemanager
+    username: user
+    password: password
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 5
+      minimum-idle: 5
+      idle-timeout: 30000
