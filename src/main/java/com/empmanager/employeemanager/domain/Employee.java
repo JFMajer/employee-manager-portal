@@ -22,29 +22,11 @@ public record Employee(
     @CreatedDate
     Instant createdDate,
     @LastModifiedDate
-    Instant lastModifiedDate
+    Instant lastModifiedDate,
+    @Version
+    int version
 ) {
-    public static Employee of(
-        Long id,
-        String name,
-        String email,
-        String jobTitle,
-        String phone,
-        String imageUrl,
-        String employeeCode,
-        Instant createdDate,
-        Instant lastModifiedDate
-    ) {
-        return new Employee(
-            id,
-            name,
-            email,
-            jobTitle,
-            phone,
-            imageUrl,
-            employeeCode,
-            createdDate,
-            lastModifiedDate
-        );
+    public static Employee of(String name, String email, String jobTitle, String phone, String imageUrl, String employeeCode) {
+        return new Employee(null, name, email, jobTitle, phone, imageUrl, employeeCode, null, null, 0);
     }
 }
