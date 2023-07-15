@@ -15,7 +15,7 @@ public record Employee(
     @NotBlank(message = "Job title is mandatory")
     String jobTitle,
     @NotBlank(message = "Phone is mandatory")
-    String phone,
+    String phoneNumber,
     String imageUrl,
     @NotBlank(message = "Employee code is mandatory")
     String employeeCode,
@@ -26,7 +26,7 @@ public record Employee(
     @Version
     int version
 ) {
-    public static Employee of(String name, String email, String jobTitle, String phone, String imageUrl, String employeeCode) {
-        return new Employee(null, name, email, jobTitle, phone, imageUrl, employeeCode, null, null, 0);
+    public static Employee of(String name, String email, String jobTitle, String phoneNumber, String imageUrl, String employeeCode) {
+        return new Employee(null, name, email, jobTitle, phoneNumber, imageUrl, employeeCode, null, null, 0);
     }
 }

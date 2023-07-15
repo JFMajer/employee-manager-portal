@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeResource {
@@ -17,9 +19,8 @@ public class EmployeeResource {
 
     // return all employees
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Employee>> getAllEmployees() {
-        Iterable<Employee> employees = employeeService.findAllEmployees();
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+    public Iterable<Employee> getAllEmployees() {
+        return employeeService.findAllEmployees();
     }
 
     // return employee by id
@@ -31,9 +32,9 @@ public class EmployeeResource {
 
     // add employee
     @PostMapping("/add")
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
-        Employee newEmployee = employeeService.addEmployee(employee);
-        return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee addEmployee(@Valid @RequestBody Employee employee) {
+        return employeeService.addEmployee(employee);
     }
 
     // update employee
