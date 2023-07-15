@@ -19,8 +19,8 @@ public class EmployeeService {
 
     // add employee
     public Employee addEmployee(Employee employee) {
-        if (employeeRepository.findEmployeeByEmail(employee.email()).isPresent()) {
-            throw new EmployeeAlreadyExists("Employee with email " + employee.email() + " already exists");
+        if (employeeRepository.findEmployeeByEmail(employee.email()).isPresent() || employeeRepository.findEmployeeById(employee.id()).isPresent()) {
+            throw new EmployeeAlreadyExists("Employee with email " + employee.email() + "and ID" + employee.id() + " already exists");
         }
         return employeeRepository.save(employee);
     }

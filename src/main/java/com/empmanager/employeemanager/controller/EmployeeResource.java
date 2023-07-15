@@ -3,8 +3,9 @@ package com.empmanager.employeemanager.controller;
 import com.empmanager.employeemanager.domain.Employee;
 import com.empmanager.employeemanager.service.EmployeeService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 
@@ -13,6 +14,8 @@ import javax.validation.Valid;
 public class EmployeeResource {
     private final EmployeeService employeeService;
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeResource.class);
+
     public EmployeeResource(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
@@ -20,35 +23,50 @@ public class EmployeeResource {
     // return all employees
     @GetMapping("/all")
     public Iterable<Employee> getAllEmployees() {
+        log.info("Getting all employees");
         return employeeService.findAllEmployees();
     }
 
     // return employee by id
     @GetMapping("/find/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id) {
-        Employee employee = employeeService.findEmployeeById(id);
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+    public Employee getEmployeeById(@PathVariable("id") Long id) {
+        log.info("Getting employee with id {}", id);
+        return employeeService.findEmployeeById(id);
     }
 
     // add employee
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public Employee addEmployee(@Valid @RequestBody Employee employee) {
+        log.info("Saving new employee");
         return employeeService.addEmployee(employee);
     }
 
-    // update employee
-    @PutMapping("/update")
-    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
-        Employee updateEmployee = employeeService.updateEmployee(employee);
-        return new ResponseEntity<>(updateEmployee, HttpStatus.OK);
+    // add multiple employees
+    @PostMapping("/addMultiple")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Iterable<Employee> addMultipleEmployees(@Valid @RequestBody Iterable<Employee> employees) {
+        for (Employee employee : employees) {
+            log.info("Saving new employee");
+            employeeService.addEmployee(employee);
+        }
+        return employees;
     }
+
+    // update employee
+    @PutMapping("/update/{id}")
+    public Employee updateEmployee(@PathVariable("id") Long id, @Valid @RequestBody Employee employee) {
+        log.info("Updating employee with id {}", id);
+        return employeeService.updateEmployee(employee);
+    }
+
 
     // delete employee
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable("id") Long id) {
+        log.info("Deleting employee with id {}", id);
         employeeService.deleteEmployee(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
