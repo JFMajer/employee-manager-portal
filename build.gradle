@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.12'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'com.google.cloud.tools.jib' version '3.1.4'
 }
 
 group = 'com.emp-manager'
@@ -24,11 +25,19 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'org.testcontainers:postgresql'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jib {
+	// set up java 17 base compatible image
+	from {
+		image = "eclipse-temurin:17-jre-alpine"
+	}
+	to {
+		image = "emp-manager"
+		tags = ["latest"]
+	}
 }
